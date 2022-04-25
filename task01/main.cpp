@@ -18,8 +18,8 @@ Eigen::Matrix<double,4,4,Eigen::RowMajor> GetHomographicTransformation(
       {+0.5,+0.5},
       {-0.5,+0.5} };
 
-  Eigen::Matrix<double, 8, 8> A;
-  Eigen::Vector<double, 8> b;
+  Eigen::MatrixXd A(8, 8);
+  Eigen::VectorXd b(8);
   for(int i = 0; i < 4; i++) {
     A(2 * i, 0) = c0[i][0];
     A(2 * i, 1) = c0[i][1];
@@ -41,7 +41,7 @@ Eigen::Matrix<double,4,4,Eigen::RowMajor> GetHomographicTransformation(
     A(2 * i + 1, 7) = -c1[i][1] * c0[i][1];
     b(2 * i + 1) = c1[i][1];
   }
-  Eigen::Vector<double, 8> x = A.colPivHouseholderQr().solve(b);
+  Eigen::VectorXd x = A.colPivHouseholderQr().solve(b);
 
   Eigen::Matrix<double,4,4,Eigen::RowMajor> m;
     m <<
