@@ -24,10 +24,16 @@ Eigen::Matrix<double,4,4,Eigen::RowMajor> GetHomographicTransformation(
     A(2 * i, 0) = c0[i][0];
     A(2 * i, 1) = c0[i][1];
     A(2 * i, 2) = 1;
+    A(2 * i, 3) = 0;
+    A(2 * i, 4) = 0;
+    A(2 * i, 5) = 0;
     A(2 * i, 6) = -c1[i][0] * c0[i][0];
     A(2 * i, 7) = -c1[i][0] * c0[i][1];
     b(2 * i) = c1[i][0];
 
+    A(2 * i + 1, 0) = 0;
+    A(2 * i + 1, 1) = 0;
+    A(2 * i + 1, 2) = 0;
     A(2 * i + 1, 3) = c0[i][0];
     A(2 * i + 1, 4) = c0[i][1];
     A(2 * i + 1, 5) = 1;
