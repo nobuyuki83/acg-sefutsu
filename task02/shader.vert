@@ -17,7 +17,6 @@ void main()
     // "canonical view volume (i.e.. [-1,+1]^3)" pass to the rasterizer.
     // type of "gl_Vertex" and "gl_Position" are "vec4", which is homogeneious coordinate
 
-    gl_Position = gl_Vertex; // following code do nothing (input == output)
 
     float x0 = gl_Vertex.x; // x-coord
     float y0 = gl_Vertex.y; // y-coord
@@ -30,8 +29,15 @@ void main()
     // the "back" direction (i.e., +Z direction) will be projected as the unit circle in XY plane.
     // in GLSL, you can use built-in math function (e.g., sqrt, atan).
     // look at page 56 of https://www.khronos.org/registry/OpenGL/specs/gl/GLSLangSpec.1.20.pdf
-    float x1 = x0;
-    float y1 = y0;
-    float z1 = z0;
+    vec3 vertex = vec3(x0, y0, z0);
+    vec3 lens_pos = vec3(0,0,cam_z_pos);
+    vec3 lens2ver = vertex - lens_pos;
+    float theta = atan(sqrt(lens2ver.x * lens2ver.x + lens2ver.y * lens2ver.y), -lens2ver.z);
+    float phi = atan(lens2ver.y, lens2ver.x);
+    float r = theta / PI;
+
+    float x1 = r * cos(phi);
+    float y1 = r * sin(phi);
+    float z1 = 0;
     gl_Position = vec4(x1,y1,z1,1); // homogenious coordinate
 }
