@@ -20,9 +20,9 @@ void main()
     // modify code below to define transformation from input (x0,y0,z0) to output (x1,y1,z1)
     // such that after transformation, orthogonal z-projection will be fisheye lens effect
     // Specifically, achieve equidistance projection (https://en.wikipedia.org/wiki/Fisheye_lens)
-    // the lens is facing -Z direction and lens's position is at (0,0,cam_z_pos)
+    // the lens is facing +Z direction and lens's position is at (0,0,cam_z_pos)
     // the lens covers all the view direction
-    // the "back" direction (i.e., +Z direction) will be projected as the unit circle in XY plane.
+    // the "back" direction (i.e., -Z direction) will be projected as the unit circle in XY plane.
     // in GLSL, you can use built-in math function (e.g., sqrt, atan).
     // look at page 56 of https://www.khronos.org/registry/OpenGL/specs/gl/GLSLangSpec.1.20.pdf
     vec3 lens_pos = vec3(0, 0, cam_z_pos);
@@ -31,12 +31,12 @@ void main()
     float vy = lens2ver.y;
     float vz = lens2ver.z;
 
-    float theta = atan(sqrt(vx * vx + vy * vy), -vz);
+    float theta = atan(sqrt(vx * vx + vy * vy), vz);
     float phi = atan(vy, vx);
     float r = theta / PI;
 
     float x1 = r * cos(phi);
     float y1 = r * sin(phi);
-    float z1 = 0;
+    float z1 = length(lens2ver) / 4;
     gl_Position = vec4(x1,y1,z1,1); // homogenious coordinate
 }
