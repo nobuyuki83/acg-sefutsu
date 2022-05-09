@@ -26,8 +26,23 @@ float SDF(vec3 pos)
   // Look Inigo Quilez's article for hints:
   // https://iquilezles.org/articles/distfunctions/
 
+  float r_big = 0.8;
+  float r_small = 0.12;
+  float interval = 0.2;
+
+  float res = length(pos) - r_big;
+
+  for(float x = -1; x <= 1; x += interval) {
+    for(float y = -1; y <= 1; y += interval) {
+      for(float z = -1; z <= 1; z += interval) {
+        vec3 center = vec3(x, y, z);
+        res = max(res, r_small - length(pos - center));
+      }
+    }
+  }
+
   // for "problem2" the code below is not used.
-  return sdf_box(pos, vec3(0.1,0.2,0.3));
+  return res;
 }
 
 void main()
