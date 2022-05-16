@@ -29,20 +29,14 @@ float SDF(vec3 pos)
   float r_big = 0.8;
   float r_small = 0.12;
   float interval = 0.2;
+  vec3 interval_vec = vec3(interval);
 
-  float res = length(pos) - r_big;
+  float sp_big = length(pos) - r_big;
 
-  for(float x = -1; x <= 1; x += interval) {
-    for(float y = -1; y <= 1; y += interval) {
-      for(float z = -1; z <= 1; z += interval) {
-        vec3 center = vec3(x, y, z);
-        res = max(res, r_small - length(pos - center));
-      }
-    }
-  }
+  vec3 normalized_pos_for_small = mod(pos + interval_vec / 2, interval_vec) - interval_vec /2;
+  float sp_small = length(normalized_pos_for_small) - r_small;
 
-  // for "problem2" the code below is not used.
-  return res;
+  return max(sp_big, -sp_small);
 }
 
 void main()
