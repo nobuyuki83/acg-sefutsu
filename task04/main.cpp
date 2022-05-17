@@ -48,21 +48,22 @@ double SamplingHemisphere(
   // hint3: for longitude use inverse sampling method to achieve cosine weighted sample.
   // hint4: first assume z is the up in the polar coordinate, then rotate the sampled direction such that "z" will be up.
   // write some codes below (5-10 lines)
-  using namespace std;
+
   double phi = dfm2::MyERand48<double>(Xi) * 2 * M_PI;
   double u = dfm2::MyERand48<double>(Xi);
   double theta = std::acos(std::sqrt(u));
   double x = std::sin(theta) * std::cos(phi);
   double y = std::sin(theta) * std::sin(phi);
   double z = std::cos(theta);
-  // double ntheta = acos(nrm[2]);
-  // double nphi = acos(nrm[0] / sin(ntheta));
-  // dir[0] = cos(ntheta) * cos(nphi) * x - sin(nphi) * y + sin(ntheta) * cos(nphi) * z;
-  // dir[1] = cos(ntheta) * sin(nphi) * x + cos(nphi) * y + sin(ntheta) * sin(nphi) * z;
-  // dir[2] = -sin(ntheta) * x + cos(ntheta) * z;
-  dir[0] = x;
-  dir[1] = y;
-  dir[2] = z;
+
+  // polar coordinate of nrm
+  double ntheta = std::acos(nrm[2]);
+  double nphi = std::acos(nrm[0] / sin(ntheta));
+  std::vector<double> p({x, y, z});
+  dfm2::Translate_Points3(p, 0.0, ntheta, nphi);
+  dir[0] = p[0];
+  dir[1] = p[1];
+  dir[2] = p[2];
   return 1;
 
   // below: naive implementation to "uniformly" sample hemisphere using "rejection sampling"
