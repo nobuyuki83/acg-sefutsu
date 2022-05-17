@@ -58,7 +58,7 @@ double SamplingHemisphere(
 
   // polar coordinate of nrm
   double ntheta = std::acos(nrm[2]);
-  double nphi = std::acos(nrm[0] / sin(ntheta));
+  double nphi = std::acos(nrm[0] / std::sin(ntheta));
   std::vector<double> p({x, y, z});
   dfm2::Translate_Points3(p, 0.0, ntheta, nphi);
   dir[0] = p[0];
