@@ -29,6 +29,21 @@
 
 namespace dfm2 = delfem2;
 
+
+inline void Cross3D(
+    double r[3],
+    const double v1[3],
+    const double v2[3]) {
+  r[0] = v1[1] * v2[2] - v2[1] * v1[2];
+  r[1] = v1[2] * v2[0] - v2[2] * v1[0];
+  r[2] = v1[0] * v2[1] - v2[0] * v1[1];
+}
+inline void Normalize3D(double x[3]) {
+  double length = std::sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
+  x[0] /= length;
+  x[1] /= length;
+  x[2] /= length;
+}
 // ----------------------------------------
 
 /*! function to compute "weight" and "direction"
@@ -56,14 +71,16 @@ double SamplingHemisphere(
   double y = std::sin(theta) * std::sin(phi);
   double z = std::cos(theta);
 
-  // polar coordinate of nrm
-  double ntheta = std::acos(nrm[2]);
-  double nphi = std::acos(nrm[0] / std::sin(ntheta));
-  std::vector<double> p({x, y, z});
-  dfm2::Translate_Points3(p, 0.0, ntheta, nphi);
-  dir[0] = p[0];
-  dir[1] = p[1];
-  dir[2] = p[2];
+  double nx[3], ny[3];
+  const double *nz = nrm;
+  const double ez[3] = {0, 0, 1};
+  Cross3D(nx, nz, ez);
+  Normalize3D(nx);
+  Cross3D(ny, nz, nx);
+
+  dir[0] = x * nx[0] + y * ny[0] + z * nz[0];
+  dir[1] = x * nx[1] + y * ny[1] + z * nz[1];
+  dir[2] = x * nx[2] + y * ny[2] + z * nz[2];
   return 1;
 
   // below: naive implementation to "uniformly" sample hemisphere using "rejection sampling"
