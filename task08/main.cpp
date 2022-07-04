@@ -93,7 +93,7 @@ int main() {
   // the "sparse" will be made from "matrix_laplacian", "matrix_penalty", "penalty_coeff"
   // to do the assignment comment out below:
   {
-    const Eigen::SparseMatrix<double> sparse = matrix_laplacian * matrix_laplacian + penalty_coeff * matrix_penalty * matrix_penalty;
+    const Eigen::SparseMatrix<double> sparse = matrix_laplacian * matrix_laplacian + penalty_coeff * matrix_penalty;
     // below is the code to LU decompose sparse. Don't change
     solver.analyzePattern(sparse); // symbolic factorization
     solver.factorize(sparse); // numerical factorization
@@ -118,7 +118,7 @@ int main() {
     // The "vtx_xyz_def" satisfies fixed constraints using penalty method.
     // "vtx_xyz_ref", "vtx_xyz_def", "matrix_laplacian", "penalty_coeff", "matrix_penalt", and "solver" are used here.
 
-    Eigen::MatrixXd rhs0 = matrix_laplacian * matrix_laplacian * vtx_xyz_ref + penalty_coeff * matrix_penalty * matrix_penalty * vtx_xyz_def;
+    Eigen::MatrixXd rhs0 = matrix_laplacian * matrix_laplacian * vtx_xyz_ref + penalty_coeff * matrix_penalty * vtx_xyz_def;
     vtx_xyz_def = solver.solve(rhs0);
 
     // --------------------
